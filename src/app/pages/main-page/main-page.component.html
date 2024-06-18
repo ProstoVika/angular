@@ -1,0 +1,42 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="navbar-background-video">
+  <video></video>
+</div>
+<link href="https://fonts.googleapis.com/css?family=Russo+One&display=swap" rel="stylesheet">
+<h2 class="some-text"><span>SNOWBOARD</span> COLLECTION</h2>
+
+<div class="navbar-background-image">
+  <h2 class="title">Design-driven performance snowboarding components for handmade and bespoke cars...</h2>
+</div>
+
+  <div *ngIf="data$ | async as productsData; else loading">
+
+    <div class="container">
+  <div class="img-container" *ngFor="let products of productsData">
+    <div class="image-wrapper">
+      <div class="discount-circle"
+           [ngClass]="{'first': products.discount >= 70, 'second': products.discount >= 60 && products.discount < 70, 'third': products.discount < 60}">
+        {{ products.discount }}
+        %
+      </div>
+
+      <a [routerLink]="['/product', products.id]">
+        <img [src]="products.images[0].imgUrl" [alt]="products.name" class="img"/>
+        <button class="bag-btn">
+          <i class="material-icons">favorite_border</i>
+        </button>
+      </a>
+    </div>
+
+    <div class="product-info">
+      <h3>{{ products.name }}</h3>
+      <p>Price: {{ products.price | currency:'EUR':'symbol':'1.0-0' }}</p>
+      <p>Description: {{ products.description | descriptionLimit: 35 }}</p>
+      <p>Discount: {{ products.discount }}%</p>
+    </div>
+  </div>
+  </div>
+
+</div>
+<ng-template #loading></ng-template>

@@ -1,0 +1,62 @@
+.back {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 20px 10px 20px;
+}
+.back:hover {
+  background-color: #45a049;
+}
+
+.product-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+.product-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.product-form input[type=text],
+.product-form input[type=number],
+.product-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.product-form textarea {
+  resize: vertical;
+}
+.product-form input[type=checkbox] {
+  margin-right: 5px;
+}
+.product-form .checkbox-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.product-form .checkbox-container > div {
+  margin-right: 10px;
+}
+.product-form .upload {
+  margin-bottom: 10px;
+}
+.product-form button[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 20px 10px 20px;
+}
+.product-form button[type=submit]:hover {
+  background-color: #45a049;
+}
+
+/*# sourceMappingURL=product-new.component.css.map */

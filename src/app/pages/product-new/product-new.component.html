@@ -1,0 +1,72 @@
+
+<button type="button" class="back" routerLink="/main-page" xmlns="http://www.w3.org/1999/html">Back</button>
+
+<form [formGroup]="productForm" (ngSubmit)="createNewProduct()" class="product-form">
+  <label for="name">Name:</label>
+  <input type="text" id="name" formControlName="name" required>
+
+  <label for="description">Description: {{ newProduct.description | descriptionLimit: 15 }}</label>
+  <textarea id="description" formControlName="description" required></textarea>
+
+  <label for="price">Price:</label>
+  <input type="text" id="price" formControlName="price" required>
+
+  <label for="main">Main:</label>
+  <input type="checkbox" id="main" formControlName="main">
+
+  <label for="shop">Shop:</label>
+  <input type="text" id="shop" formControlName="shop">
+
+  <label for="shipping">Shipping:</label>
+  <input type="text" id="shipping" formControlName="shipping">
+
+  <label for="discountUntil">Discount Until:</label>
+  <input type="date" id="discountUntil" formControlName="discountUntil">
+
+  <label for="isNew">Is New:</label>
+  <input type="checkbox" id="isNew" formControlName="isNew">
+
+  <label for="discount">Discount:</label>
+  <input type="number" id="discount" formControlName="discount" required>
+
+  <label for="productColors">Product Colors:</label>
+  <input type="text" id="productColors" formControlName="productColors">
+
+  <label for="productSizes" id="productSizes">Product Sizes:</label>
+  <div class="checkbox-container" >
+    <div>
+      <input type="checkbox" id="size-xs" formControlName="sizeXS">
+      <label for="size-xs">XS</label>
+    </div>
+    <div>
+      <input type="checkbox" id="size-s" formControlName="sizeS">
+      <label for="size-s">S</label>
+    </div>
+    <div>
+      <input type="checkbox" id="size-m" formControlName="sizeM">
+      <label for="size-m">M</label>
+    </div>
+    <div>
+      <input type="checkbox" id="size-l" formControlName="sizeL">
+      <label for="size-l">L</label>
+    </div>
+    <div>
+      <input type="checkbox" id="size-xl" formControlName="sizeXL">
+      <label for="size-xl">XL</label>
+    </div>
+  </div>
+
+  <label for="quantity">Quantity:</label>
+  <input type="number" id="quantity" formControlName="quantity" required>
+
+  <label for="rating">Rating:</label>
+  <input type="number" id="rating" formControlName="rating" required>
+
+  <div class="upload">
+    <label for="image">Image:</label>
+    <input type="file" id="image" (change)="addImage($event)" accept="image/*" multiple>
+  </div>
+  <button type="submit">Create</button>
+</form>
+
+<router-outlet></router-outlet>

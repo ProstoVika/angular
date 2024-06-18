@@ -1,0 +1,233 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
+<div class="checkout">
+    <form [formGroup]="angForm" class="total">
+        <div *ngIf="currentStep === 1">
+            <h3 class="title-order">SHOPPING BAG ITEMS</h3>
+            <div class="order-size-guide">
+                <p>Need more information on sizing?</p>
+                <p class="size">View our size guide</p>
+            </div>
+            <div *ngFor="let product of cartItems$ | async" class="product-item">
+                <img [src]="product.imgUrl" alt="{{ product.name }}" class="product-image"/>
+                <div class="product-details-checkout">
+                    <h2 class="cart-item-name">{{ product?.name }}</h2>
+                    <p class="cart-item-price">{{ product?.price | currency:'EUR':'symbol':'1.0-0' }}</p>
+                    <p class="cart-item-color">Color: {{ product?.selectedColor }}</p>
+                    <p class="cart-item-size">Size: {{ product?.selectedSize }}</p>
+                    <p>Price: {{ product.price | currency:'EUR':'symbol':'1.0-0' }}</p>
+                    <div class="quantity-controls"> Quantity:
+                        <button (click)="decreaseQuantity(product)">-</button>
+                        <p class="cart-item-quantity">{{ product?.quantity || 0 }}</p>
+                        <button (click)="increaseQuantity(product)">+</button>
+                        <p class="cart-item-subtotal">{{ getSubtotal(product) | currency:'EUR':'symbol':'1.0-0'}}</p>
+                    </div>
+                </div>
+                <button (click)="removeFromCart(product.id, product.selectedColor, product.selectedSize)"
+                        class="remove-button-checkout"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="cart-total-order">
+                <p>ORDER SUMMARY</p>
+                <p>Total: {{ total | currency:'EUR':'symbol':'1.0-0'}}</p>
+            </div>
+            <button type="button" class="next-order-btn" (click)="nextStep()">Proceed to checkout</button>
+        </div>
+    </form>
+
+    <div *ngIf="currentStep > 1">
+        <div class="container">
+            <div class="ang">
+
+                <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+                    <mat-step [stepControl]="firstFormGroup">
+                        <ng-template matStepLabel>Your information</ng-template>
+                        <form [formGroup]="firstFormGroup" class="delivery">
+                            <mat-form-field>
+                                <mat-label class="name">Name</mat-label>
+                                <input matInput placeholder="Last name, First name" formControlName="name" required/>
+                                <mat-error
+                                        *ngIf="name && name.errors && (firstFormGroup.dirty || firstFormGroup.touched)">
+                                    <div *ngIf="name.errors?.['required']">Name is required.</div>
+                                    <div *ngIf="name.errors?.['pattern']">Invalid name format. Only uppercase letters
+                                        are allowed.
+                                    </div>
+                                    <div *ngIf="name.errors?.['minlength']">Name must be at least 2 characters long.
+                                    </div>
+                                    <div *ngIf="name.errors?.['forbiddenName']">Name cannot be Dima)</div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label class="address">Address</mat-label>
+                                <input matInput placeholder="110 Main St" formControlName="address" required/>
+                                <mat-error
+                                        *ngIf="address && address.errors && (firstFormGroup.dirty || firstFormGroup.touched)">
+                                    <div *ngIf="address.errors?.['required']">Address is required.</div>
+                                    <div *ngIf="address.errors?.['minlength']">Address must be at least 3 characters
+                                        long.
+                                    </div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label class="zip">Postal code</mat-label>
+                                <input matInput placeholder="W4 7NY" formControlName="zip" required/>
+                                <mat-error
+                                        *ngIf="zip && zip.errors && (firstFormGroup.dirty || firstFormGroup.touched)">
+                                    <div *ngIf="zip.errors?.['required']">Postal code is required</div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label class="email">Email</mat-label>
+                                <input matInput placeholder="Email" formControlName="email" required/>
+                                <mat-error
+                                        *ngIf="email && email.errors && (firstFormGroup.dirty || firstFormGroup.touched)">
+                                    <div *ngIf="email.errors?.['required']">Email is required</div>
+                                    <div *ngIf="email.errors?.['pattern']">Invalid email format</div>
+
+                                </mat-error>
+                            </mat-form-field>
+                            <div>
+                                <button mat-button matStepperPrevious class="button-previous">Back to shop</button>
+                                <button mat-button matStepperNext>Continue</button>
+                            </div>
+                        </form>
+                    </mat-step>
+
+                    <mat-step [stepControl]="secondFormGroup">
+                        <ng-template matStepLabel>Payment</ng-template>
+                        <form [formGroup]="secondFormGroup" class="payment">
+                            <section class="radio-section">
+                                <mat-radio-group>
+                                    <mat-radio-button class="radio-margin" value="after">Pay by Card</mat-radio-button>
+                                    <mat-radio-button class="radio-margin" value="before">PayPal <i
+                                            class="fab fa-paypal"></i>
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </section>
+
+                            <mat-form-field>
+                                <mat-label>Name on card</mat-label>
+                                <input matInput placeholder="Name on card" formControlName="payment" required/>
+                                <mat-error
+                                        *ngIf="payment && payment.errors && (secondFormGroup.dirty || secondFormGroup.touched)">
+                                    <div *ngIf="payment.errors?.['required']">Name is required</div>
+                                    <div *ngIf="payment.errors?.['pattern']">Invalid name format</div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <mat-label>Card number</mat-label>
+                                <input matInput placeholder="Card number" formControlName="card" maxlength="16"
+                                       required/>
+                                <mat-error
+                                        *ngIf="card && card.errors && (secondFormGroup.dirty || secondFormGroup.touched)">
+                                    <div *ngIf="card.errors?.['required']">Card is required.</div>
+                                    <div *ngIf="card.errors?.['pattern']">Invalid format</div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="MM/YY" formControlName="exp" id="cc-exp" name="cc-exp"
+                                       maxlength="5"
+                                       required/>
+                                <mat-error
+                                        *ngIf="exp && exp.errors && (secondFormGroup.dirty || secondFormGroup.touched)">
+                                    <div *ngIf="exp.errors?.['required']">MM/YY</div>
+                                    <div *ngIf="exp.errors?.['maxlength']">Please use MM/YY format</div>
+                                    <div *ngIf="exp.errors?.['pattern']">Invalid format</div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field>
+                                <input matInput placeholder="CVC" formControlName="cvc" id="cc-cvc" name="cc-exp"
+                                       maxlength="3"
+                                       required/>
+                                <mat-error
+                                        *ngIf="cvc && cvc.errors && (secondFormGroup.dirty || secondFormGroup.touched)">
+                                    <div *ngIf="cvc.errors?.['required']">CVC</div>
+                                    <div *ngIf="cvc.errors?.['maxlength']">Please use CVC format</div>
+                                    <div *ngIf="cvc.errors?.['pattern']">Invalid format</div>
+                                </mat-error>
+                            </mat-form-field>
+
+                            <div>Accepted Cards</div>
+                            <div class="icon-container">
+                                <i class="fab fa-cc-visa"></i>
+                                <i class="fab fa-cc-amex"></i>
+                                <i class="fab fa-cc-mastercard"></i>
+                                <i class="fab fa-cc-discover"></i>
+                            </div>
+
+                            <div>
+                                <button mat-button matStepperPrevious class="button-previous">Previous step</button>
+                                <button mat-button matStepperNext>Continue</button>
+                            </div>
+                        </form>
+                    </mat-step>
+
+                    <mat-step [stepControl]="thirdFormGroup">
+                        <ng-template matStepLabel>Delivery</ng-template>
+                        <form [formGroup]="thirdFormGroup" class="delivery-date">
+                            <h2>Date of delivery</h2>
+                            <div class="radio-button">
+                                <div>Please select a delivery date.</div>
+                                <section class="radio-section">
+                                    <mat-radio-group>
+                                        <mat-radio-button class="radio-margin" value="after">Standard home delivery
+                                            <span class="additional-text">Free - Delivered between 3 and 4 business day</span>
+                                        </mat-radio-button>
+                                        <mat-radio-button class="radio-margin" value="before">Standard home delivery
+                                            <span class="additional-text">Free - Delivered between 3 and 4 business day</span>
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </section>
+                                <section class="radio-button-section">
+                                    <mat-checkbox class="radio-button-newsletter">Join our newsletter</mat-checkbox>
+                                </section>
+
+                                <div class="additional-text">I want to receive personalized promotions.I’m 16 years+ and
+                                    I consent to
+                                    <span class="highlight">privacy notice</span>.
+                                </div>
+
+                                <button mat-button matStepperPrevious class="button-previous">Previous step</button>
+                                <button mat-button (click)="resetStepper(stepper)">Reset</button>
+                            </div>
+
+                        </form>
+                    </mat-step>
+                </mat-stepper>
+
+                <button type="button" class="next-order-btn" (click)="payForOrder()" [disabled]="isPaymentDisabled">Pay Order</button>
+                <div *ngIf="orderPlaced" class="success-message">Your order has been successfully placed!</div>
+
+            </div>
+
+            <div class="form-total">
+                <h3 class="title-order">SHOPPING BAG</h3>
+                <div *ngFor="let product of cartItems$ | async" class="product-item">
+                    <img [src]="product.imgUrl" alt="{{ product.name }}" class="product-image"/>
+                    <div class="product-details-checkout">
+                        <h2 class="cart-item-name">{{ product?.name }}</h2>
+                        <p class="cart-item-price">{{ product?.price | currency:'EUR':'symbol':'1.0-0' }}</p>
+                        <p class="cart-item-color">Color: {{ product?.selectedColor }}</p>
+                        <p class="cart-item-size">Size: {{ product?.selectedSize }}</p>
+                        <p>Price: {{ product.price | currency:'EUR':'symbol':'1.0-0' }}</p>
+                    </div>
+                </div>
+                <div class="cart-total-order">
+                    <p>ORDER SUMMARY</p>
+                    <p>Total: {{ total | currency:'EUR':'symbol':'1.0-0'}}</p>
+                </div>
+                <div class="inform-section">
+                    <p>Our returns are free and easy. If something isn’t quite right, you have 28 days to send it back
+                        to us. Read more in our return and refund policy</p>
+                    <span>FREE SHIPPING ON ORDERS OVER £100 AND FREE RETURNS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
