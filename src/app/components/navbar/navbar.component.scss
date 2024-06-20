@@ -8,7 +8,7 @@ nav {
   z-index: 100;
   transition: background-color 0.3s;
   overflow: hidden;
-  padding: 2rem 15rem;
+  padding: 2rem 5rem;
   pointer-events: auto;
   background-size: 100% auto;
   background-repeat: no-repeat;
@@ -17,11 +17,15 @@ nav {
     box-shadow: 0 4px 2px -3px #A7AFC3, 0 4px 4px 1px #ffffff, 0 2px 7px 1px #e2e5fa;
   }
 
+  .btn-left-link {
+    display: flex;
+    flex-grow: 1;
 
-  .left-link, .right-link {
+  }
+  .left-link{
     display: flex;
     justify-content: center;
-    padding: 15px 8px 6px 10px;
+    padding: 15px 65px 6px 10px;
     text-decoration: none;
     font-size: 24px;
     color: #ffffff;
@@ -34,23 +38,19 @@ nav {
     }
   }
   .btn-header-logo {
-    margin-top: 10px;
-    top: 0;
-    transform: none;
-    position: relative;
-    color: #fff;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    border: 1.2px solid transparent;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     &:hover {
       border: 1.2px solid #ffffff;
       border-bottom: none;
     }
 
     .logo {
+      margin: 0 auto;
       left: 0;
       display: block;
       width: 40px;
@@ -88,6 +88,22 @@ nav {
       }
     }
   }
+  .app-cart {
+    margin-left: auto;
+    display:flex;
+    justify-content: center;
+  }
+}
+@media (max-width: 600px) {
+  nav {
+    padding: 1rem;
+  }
+  .btn-header-logo {
+    visibility:hidden;
+  }
+  .navbar-background-image {
+    width: 100%;
+  }
 }
 
 @media (max-width: 768px) {
@@ -95,28 +111,28 @@ nav {
     flex-direction: column;
     text-align: center;
     padding: 1rem;
-
-    .btn-header-logo {
-      left: 0;
-    }
-
-    a {
-      margin: 10px 0;
-      padding: 10px 0;
-      width: 100%;
-      text-align: center;
-
-    }
-  }
-}
-
-
-@media (max-width: 600px) {
-  nav {
-    padding: 1rem;
   }
 
-  .navbar-background-image {
+  .btn-left-link {
+    display: none;
+    flex-direction: column;
+  }
+
+  .btn-header-logo {
+    visibility:hidden;
+  }
+
+  .left-link {
+    margin: 10px 0;
+    padding: 10px 0;
     width: 100%;
+    text-align: center;
   }
 }
+
+@media only screen and (min-width: 992px) {
+  .btn-header-logo {
+    visibility:hidden;
+  }
+}
+

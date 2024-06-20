@@ -8,6 +8,10 @@ import { Component} from '@angular/core';
     styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-    constructor() {}
+  menuActive = false;
+
+  toggleMenu() {
+    this.menuActive = !this.menuActive;
+  }
 
 }

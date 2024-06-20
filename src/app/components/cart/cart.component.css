@@ -1,7 +1,6 @@
 .cart {
   justify-self: flex-end;
   box-sizing: border-box;
-  padding-right: 18px;
   position: relative;
 }
 .cart .cart-button-container {
